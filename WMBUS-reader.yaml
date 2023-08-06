@@ -1,0 +1,78 @@
+esphome:
+  name: WMBUS-reader
+  friendly_name: WMBUS-reader
+
+esp32:
+  board: nodemcu-32s
+  framework:
+    type: arduino
+
+external_components:
+  - source: github://SzczepanLeon/esphome-components@main
+    components: [ wmbus ]
+    refresh: 0d
+
+time:
+ - platform: sntp
+   id: time_sntp
+
+
+# Enable logging
+logger:
+  level: debug
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "9p2efbtoh/7izZ93LRVsgSXsL1JAoP07YQeoyATI7IE="
+
+ota:
+  password: "54e284b2a4ecc5af80e3d113461f3fe2"
+
+wifi:
+  ssid: "Woszu"
+  password: "8181818181"
+  manual_ip:
+    static_ip: 192.168.1.205
+    gateway: 192.168.1.1
+    subnet: 255.255.255.0
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "Test-Esp32 Fallback Hotspot"
+    password: "PrcVMxZFfD8l"
+
+captive_portal:
+
+wmbus:
+  mosi_pin: GPIO32
+  clk_pin:  GPIO33 
+  miso_pin: GPIO19
+  gdo2_pin: GPIO21
+  gdo0_pin: GPIO22
+  cs_pin:   GPIO23 
+
+
+sensor:
+  - platform: wmbus
+    meter_id: 1095753644
+    type: izar
+    add_prefix: false
+    lqi:
+      name: "My lqi"
+    rssi:
+      name: "My RSSI"
+    total_water_m3:
+      name: "My cold water"
+  - platform: wmbus
+    meter_id: 0x414FDFAC
+    type: izar
+    add_prefix: false
+    total_water_m3:
+      name: "Stan licznika wody Izar"
+  - platform: wmbus
+    meter_id: 0x03670576
+    type: apator162
+    key: "00000000000000000000000000000000"
+    add_prefix: false
+    total_water_m3:
+      name: "Stan licznika wody Apator"
