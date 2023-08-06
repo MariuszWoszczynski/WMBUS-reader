@@ -1,8 +1,12 @@
+substitutions:
+  name: "wmbus-reader3"
+  friendly_name: "wmbus-reader3"
+
 esphome:
-  name: wmbus-reader2
-  friendly_name: WMBUS-reader2
+  name: "${name}"
+  friendly_name: "${friendly_name}"
   project:
-    name: esphome.wmbus_reader2
+    name: esphome.wmbus_reader3
     version: "1.0"
     
 esp32:
@@ -16,9 +20,9 @@ external_components:
     refresh: 0d
 
 dashboard_import:
-  package_import_url: github://MariuszWoszczynski/WMBUS-reader/edit/main/WMBUS-reader.yaml
+  package_import_url: github://esphome/esphome-project-template/project-template-esp32.yaml@v6
   import_full_config: true
-  
+
 time:
  - platform: sntp
    id: time_sntp
@@ -66,4 +70,3 @@ sensor:
       name: "My RSSI"
     total_water_m3:
       name: "My cold water"
-
