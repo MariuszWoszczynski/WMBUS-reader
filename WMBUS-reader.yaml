@@ -16,7 +16,7 @@ external_components:
     refresh: 0d
 
 dashboard_import:
-  package_import_url: github://MariuszWoszczynski/WMBUS-reader/edit/main/WMBUS-reader.yaml
+  import_full_config: github://MariuszWoszczynski/WMBUS-reader/edit/main/WMBUS-reader.yaml
   
 time:
  - platform: sntp
