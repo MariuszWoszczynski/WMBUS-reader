@@ -18,9 +18,9 @@ external_components:
   - source: github://SzczepanLeon/esphome-components@main
     components: [ wmbus ]
     refresh: 0d
-
+    
 dashboard_import:
-  package_import_url: github://MariuszWoszczynski/WMBUS-reader/blob/main/WMBUS-reader.yaml
+  package_import_url: github://MariuszWoszczynski/WMBUS-reader/main/WMBUS-reader.yaml@main
   import_full_config: true
 
 time:
