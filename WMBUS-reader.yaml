@@ -1,12 +1,12 @@
 substitutions:
-  name: "wmbus-reader4"
-  friendly_name: "wmbus-reader4"
+  name: "wmbus-reader"
+  friendly_name: "wmbus-reader"
 
 esphome:
   name: "${name}"
   friendly_name: "${friendly_name}"
   project:
-    name: esphome.wmbus_reader4
+    name: esphome.wmbus_reader
     version: "1.0"
     
 esp32:
