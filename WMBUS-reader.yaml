@@ -1,7 +1,10 @@
 esphome:
   name: WMBUS-reader
   friendly_name: WMBUS-reader
-
+  project:
+    name: WMBUS-reader
+    version: "1.0"
+    
 esp32:
   board: nodemcu-32s
   framework:
@@ -12,6 +15,9 @@ external_components:
     components: [ wmbus ]
     refresh: 0d
 
+dashboard_import:
+  package_import_url: github://MariuszWoszczynski/WMBUS-reader/edit/main/WMBUS-reader.yaml
+  
 time:
  - platform: sntp
    id: time_sntp
