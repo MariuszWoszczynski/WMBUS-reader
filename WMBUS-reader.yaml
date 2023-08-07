@@ -73,7 +73,7 @@ wmbus:
 sensor:
 # first sensor
   - platform: wmbus
-    meter_id: 0x00000000
+    meter_id: 0x414FDFAC
     type: izar
     add_prefix: false
     lqi:
@@ -98,7 +98,7 @@ sensor:
       name: "Previous alarms"
   # second sensor
   - platform: wmbus
-    meter_id: 0x00000000
+    meter_id: 0x414FDFAC
     type: apator162
     key: "00000000000000000000000000000000"
     lqi:
