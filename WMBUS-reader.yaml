@@ -82,6 +82,8 @@ sensor:
       name: "My RSSI"
     total_water_m3:
       name: "My cold water"
+   #  filters:              #optional
+   #    - offset: 123.4567  #the difference between the indications of the radio overlay and the counter (if you have a used overlay)
     last_month_total_water_m3:
       name: "Last month total water"
     current_month_total_water_l:
