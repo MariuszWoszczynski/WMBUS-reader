@@ -67,7 +67,8 @@ wmbus:
   miso_pin: GPIO19
   gdo2_pin: GPIO21
   gdo0_pin: GPIO22
-  cs_pin:   GPIO23 
+  cs_pin:   GPIO23
+  log_unknown: true
 
 
 sensor:
