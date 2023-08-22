@@ -61,6 +61,9 @@ wifi:
 
 captive_portal:
 
+web_serwer: 
+  port: 80
+
 wmbus:
   mosi_pin: GPIO32
   clk_pin:  GPIO33 
@@ -101,6 +104,7 @@ sensor:
   - platform: wmbus
     meter_id: 0x00000000
     type: apator162
+    add_prefix: false
     key: "00000000000000000000000000000000"
     lqi:
       name: "My lqi"
