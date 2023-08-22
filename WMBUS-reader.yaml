@@ -128,6 +128,7 @@ sensor:
   - platform: wmbus
     meter_id: 0x00000000
     type: amiplus
+    add_prefix: false
     mode: T1C1
     rssi:
       name: "My RSSI"
