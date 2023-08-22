@@ -75,7 +75,7 @@ wmbus:
 
 
 sensor:
-# first sensor
+# first sensor (water)
   - platform: wmbus
     meter_id: 0x00000000
     type: izar
@@ -100,7 +100,7 @@ sensor:
       name: "Current alarms"
     previous_alarms:
       name: "Previous alarms"
-  # second sensor
+  # second sensor (water)
   - platform: wmbus
     meter_id: 0x00000000
     type: apator162
@@ -112,5 +112,38 @@ sensor:
       name: "My RSSI"
     total_water_m3:
       name: "My cold water"
- 
+  # third sensor (gas)
+  - platform: wmbus
+    meter_id: 0x00000000
+    type: unismart
+    add_prefix: false
+    key: "00000000000000000000000000000000"
+    lqi:
+      name: "My lqi"
+    rssi:
+      name: "My RSSI"
+    total_gas_m3:
+      name: "My gas"
+  # fourth sensor (electricity)
+  - platform: wmbus
+    meter_id: 0x00000000
+    type: amiplus
+    mode: T1C1
+    rssi:
+      name: "My RSSI"
+    total_energy_consumption_kwh:
+      name: "My consumption in kWh"
+      icon: "mdi:power-plug"
+    current_power_consumption_kw:
+      name: "My current power consumption in kW"
+    total_energy_production_kwh:
+      name: "My total energy production in kWh"
+    current_power_production_kw:
+      name: "My current power production in kW"
+    voltage_at_phase_1_v:
+      name: "My V1"
+    voltage_at_phase_2_v:
+      name: "My V2"
+    voltage_at_phase_3_v:
+      name: "My V3"
   # more options on https://github.com/SzczepanLeon/esphome-components
