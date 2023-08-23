@@ -72,6 +72,8 @@ wmbus:
   gdo0_pin: GPIO22
   cs_pin:   GPIO23
   log_unknown: true
+  led_pin: GPIO2
+  led_blink_time: "1s"
 
 
 sensor:
