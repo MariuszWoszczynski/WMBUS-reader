@@ -12,7 +12,8 @@ esphome:
   project:
     name: esphome.wmbus_reader
     version: "1.0"
-    
+  compile_process_limit: 1  # only for RPI 
+  
 esp32:
   board: nodemcu-32s
   framework:
@@ -22,7 +23,7 @@ external_components:
   - source: github://SzczepanLeon/esphome-components@main
     components: [ wmbus ]
     refresh: 0d
-    compile_process_limit: 1  # only for RPI 
+    
     
 time:
  - platform: sntp
