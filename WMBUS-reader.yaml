@@ -75,8 +75,16 @@ wmbus:
   led_pin: GPIO2
   led_blink_time: "1s"
 
-
+text_sensor: # For Apator16-2 water meter please add also text sensor (for debug purposes):
+  - platform: wmbus
+    name: "Text debug for Apator 16-2"
+    
 sensor:
+  - platform: wifi_signal # Reports the WiFi signal strength/RSSI in dB
+    name: "WiFi Signal dB"
+    id: wifi_signal_db
+    update_interval: 60s
+    entity_category: "diagnostic"
 # first sensor (water)
   - platform: wmbus
     meter_id: 0x00000000
