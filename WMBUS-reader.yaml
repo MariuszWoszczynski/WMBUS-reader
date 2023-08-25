@@ -22,6 +22,7 @@ external_components:
   - source: github://SzczepanLeon/esphome-components@main
     components: [ wmbus ]
     refresh: 0d
+    compile_process_limit: 1  # only for RPI 
     
 time:
  - platform: sntp
