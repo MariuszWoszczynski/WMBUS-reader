@@ -61,6 +61,12 @@ wifi:
     ssid: "WMBUS Reader - Fallback Hotspot"
     password: "12345678"
 
+mqtt:
+  broker: 10.0.0.2  #your HA IP
+  port: 1883. #your port
+  username: username #your username
+  password: password #your password
+
 captive_portal:
 
 web_server: 
