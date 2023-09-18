@@ -12,7 +12,8 @@ esphome:
   project:
     name: esphome.wmbus_reader
     version: "1.0"
-  compile_process_limit: 1  # only for RPI 
+  # only for RPI 
+  compile_process_limit: 1  
   
 esp32:
   board: nodemcu-32s
@@ -61,11 +62,12 @@ wifi:
     ssid: "WMBUS Reader - Fallback Hotspot"
     password: "12345678"
 
+#your mqtt parameters
 mqtt:
-  broker: 10.0.0.2  #your HA IP
-  port: 1883. #your port
-  username: username #your username
-  password: password #your password
+  broker: 10.10.10.10  
+  port: 1883
+  username: username 
+  password: password 
 
 captive_portal:
 
@@ -84,9 +86,11 @@ wmbus:
   led_blink_time: "1s"
 
 text_sensor: 
-  - platform: wmbus                       # For Apator16-2 water meter please add also text sensor (for debug purposes):
+    # For Apator16-2 water meter please add also text sensor (for debug purposes):
+  - platform: wmbus                       
     name: "Text debug for Apator 16-2"
-  - platform: wifi_info                   #diagnostic info
+    #diagnostic info
+  - platform: wifi_info                   
     ip_address:
       name: 'IP Address'
       icon: mdi:wifi
@@ -95,7 +99,8 @@ text_sensor:
       icon: mdi:wifi-strength-2
       
 sensor:
-  - platform: wifi_signal # Reports the WiFi signal strength/RSSI in dB
+    # Reports the WiFi signal strength/RSSI in dB
+  - platform: wifi_signal 
     name: "WiFi Signal dB"
     id: wifi_signal_db
     update_interval: 60s
