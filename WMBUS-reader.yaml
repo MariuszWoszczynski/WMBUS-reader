@@ -63,11 +63,11 @@ wifi:
     password: "12345678"
 
 #your mqtt parameters
-mqtt:
-  broker: 10.10.10.10  
-  port: 1883
-  username: username 
-  password: password 
+#mqtt:
+#  broker: 10.10.10.10  
+#  port: 1883
+#  username: username 
+#  password: password 
 
 captive_portal:
 
