@@ -60,7 +60,7 @@ wifi:
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
     ssid: "WMBUS Reader - Fallback Hotspot"
-    password: "12345678"
+    password: "password_12345678"
 
 #your mqtt parameters
 #mqtt:
@@ -121,7 +121,7 @@ sensor:
     last_month_total_water_m3:
       name: "Last month total water"
     current_month_total_water_l:
-      name: "Current month toal water"
+      name: "Current month total water"
     transmit_period_s:
       name: "Transmit period [s]"
     remaining_battery_life_y:
