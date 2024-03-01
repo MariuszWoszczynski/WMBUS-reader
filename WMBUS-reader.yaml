@@ -45,9 +45,10 @@ ota:
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
-  power_save_mode: none
+  power_save_mode: LIGHT
   fast_connect: true
   reboot_timeout: 10min
+  output_power: 18dB
 #  static IP configuration (instead of data from the secret file)
 #  ssid: "MY_WIFI"
 #  password: "0123456789"
