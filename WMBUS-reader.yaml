@@ -13,7 +13,7 @@ esphome:
     name: esphome.wmbus_reader
     version: "1.0"
   # only for RPI 
-  compile_process_limit: 1  
+  compile_process_limit: 1
   
 esp32:
   board: nodemcu-32s
