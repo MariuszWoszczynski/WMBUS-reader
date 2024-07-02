@@ -41,6 +41,7 @@ api:
     key: "9p2efbtoh/7izZ93LRVsgSXsL1JAoP07YQeoyATI7IE="
 
 ota:
+  - platform: esphome
 
 wifi:
   ssid: !secret wifi_ssid
