@@ -1,5 +1,5 @@
 dashboard_import:
-  package_import_url: github://MariuszWoszczynski/WMBUS-reader/wmbus-reader-8266.yaml@main
+  package_import_url: github://MariuszWoszczynski/WMBUS-reader/wmbus-reader-esp8266.yaml@main
   import_full_config: true
 
 substitutions:
