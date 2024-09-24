@@ -1,5 +1,5 @@
 dashboard_import:
-  package_import_url: github://MariuszWoszczynski/WMBUS-reader/WMBUS-reader-8266.yaml@main
+  package_import_url: github://MariuszWoszczynski/WMBUS-reader/wmbus-reader-8266.yaml@main
   import_full_config: true
 
 substitutions:
@@ -42,8 +42,8 @@ ota:
   - platform: esphome
 
 wifi:
-  ssid: "Woszu"
-  password: "8181818181"
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
   power_save_mode: LIGHT
   fast_connect: true
   reboot_timeout: 10min
