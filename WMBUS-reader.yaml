@@ -97,7 +97,7 @@ text_sensor:
       name: 'Connected SSID'
       icon: mdi:wifi-strength-2
       
-sensor:    ############### The following sensors are examples. Adapt the sensors to the meters you have (according to the instructions) and remove the others.#############3##
+sensor:    ############### The following sensors are examples. Adapt the sensors to the meters you have (according to the instructions) and remove the others.###############
     # Reports the WiFi signal strength/RSSI in dB
   - platform: wifi_signal 
     name: "WiFi Signal dB"
