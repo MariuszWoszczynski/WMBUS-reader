@@ -1,0 +1,65 @@
+dashboard_import:
+  package_import_url: github://MariuszWoszczynski/WMBUS-reader/WMBUS-reader-8266.yaml@main
+  import_full_config: true
+
+substitutions:
+  name: "wmbus-reader-esp8266"
+  friendly_name: "WMBUS Reader"
+
+esphome:
+  name: "${name}"
+  friendly_name: "${friendly_name}"
+  project:
+    name: esphome.wmbus_reader
+    version: "1.0"
+  # only for RPI 
+#  compile_process_limit: 1
+  
+esp8266:
+  board: nodemcuv2
+
+external_components:
+  - source: github://SzczepanLeon/esphome-components@3.2.3
+    components: [ wmbus ]
+    refresh: 0d
+    
+    
+time:
+ - platform: sntp
+   id: time_sntp
+
+
+# Enable logging
+logger:
+  level: debug
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "9p2efbtoh/7izZ93LRVsgSXsL1JAoP07YQeoyATI7IE="
+
+ota:
+  - platform: esphome
+
+wifi:
+  ssid: "Woszu"
+  password: "8181818181"
+  power_save_mode: LIGHT
+  fast_connect: true
+  reboot_timeout: 10min
+  output_power: 18dB
+  
+  # Enable fallback hotspot (captive portal) in case wifi connection fails
+  ap:
+    ssid: "WMBUS Reader - Fallback Hotspot"
+
+
+captive_portal:
+
+wmbus:
+  mosi_pin: D7
+  clk_pin:  D5 
+  miso_pin: D6
+  gdo2_pin: D2
+  gdo0_pin: D1
+  cs_pin:   D4
