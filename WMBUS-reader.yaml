@@ -75,7 +75,8 @@ captive_portal:
 
 web_server: 
   port: 80
-
+  version: 3
+  
 wmbus:
   mosi_pin: GPIO32
   clk_pin:  GPIO33 
