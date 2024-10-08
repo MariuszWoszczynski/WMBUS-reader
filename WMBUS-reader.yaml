@@ -1,47 +1,35 @@
 dashboard_import:
-  package_import_url: github://MariuszWoszczynski/WMBUS-reader/WMBUS-reader.yaml@main
+  package_import_url: github://MariuszWoszczynski/Energy-meter-LED/energy-meter.yaml@main
   import_full_config: true
 
+
 substitutions:
-  name: "wmbus-reader"
-  friendly_name: "wmbus-reader"
+  device_name: energy-meter
+  friendly_name: Energy meter
+  project_version: 4.2.1
+  device_description: Measure your energy consumption with the pulse LED on your energy meter
+  
+  # Define the GPIO pins
+  pulse_pin: GPIO5
+  status_led: GPIO15
+  led_pin_red: GPIO17
+  led_pin_green: GPIO4    #not connected
 
 esphome:
-  name: "${name}"
-  friendly_name: "${friendly_name}"
+  name: ${device_name}
+  comment: ${device_description}
+  name_add_mac_suffix: false
   project:
-    name: esphome.wmbus_reader
-    version: "1.0"
-  # only for RPI 
-#  compile_process_limit: 1
-  
+    name: esphome.${device_name}
+    version: ${project_version}
+
 esp32:
-  board: nodemcu-32s
+  board: lolin_s2_mini
   framework:
     type: arduino
 
-external_components:
-  - source: github://SzczepanLeon/esphome-components@3.2.3
-    components: [ wmbus ]
-    refresh: 0d
-    
-    
-time:
- - platform: sntp
-   id: time_sntp
-
-
 # Enable logging
 logger:
-  level: debug
-
-# Enable Home Assistant API
-api:
-  encryption:
-    key: "9p2efbtoh/7izZ93LRVsgSXsL1JAoP07YQeoyATI7IE="
-
-ota:
-  - platform: esphome
 
 wifi:
   ssid: !secret wifi_ssid
@@ -50,131 +38,183 @@ wifi:
   fast_connect: true
   reboot_timeout: 10min
   output_power: 18dB
-#  static IP configuration (instead of data from the secret file)
-#  ssid: "MY_WIFI"
-#  password: "0123456789"
-#  reboot_timeout: 10min
-#  manual_ip:
-#    static_ip: 192.168.1.99
-#    gateway: 192.168.1.1
-#    subnet: 255.255.255.0
-  
-  # Enable fallback hotspot (captive portal) in case wifi connection fails
+
+  # Set up a wifi access point
   ap:
-    ssid: "WMBUS Reader - Fallback Hotspot"
-#    password: "password_12345678"
+    ssid: ${friendly_name}
 
-#your mqtt parameters
-#mqtt:
-#  broker: 10.10.10.10  
-#  port: 1883
-#  username: username 
-#  password: password 
-
+# In combination with the `ap` this allows the user
+# to provision wifi credentials to the device via WiFi AP.
 captive_portal:
 
-web_server: 
-  port: 80
+# Local Web Server running on port 80
+web_server:
+  id: esphome_web_server
   version: 3
-  
-wmbus:
-  mosi_pin: GPIO32
-  clk_pin:  GPIO33 
-  miso_pin: GPIO19
-  gdo2_pin: GPIO21
-  gdo0_pin: GPIO22
-  cs_pin:   GPIO23
-#  log_unknown: true
-  led_pin: GPIO2
-  led_blink_time: "1s"
 
-text_sensor: 
-    #diagnostic info
-  - platform: wifi_info                   
+# OTA configuration #
+ota:
+  - platform: esphome
+    id: ota_esphome
+
+# Enable Home Assistant API
+api:
+  services:
+    - service: reset_total_energy
+      then:
+        - button.press:
+            id: button_reset_total
+
+
+# Enable time component to reset energy at midnight
+# https://esphome.io/components/time/homeassistant.html
+time:
+  - platform: homeassistant
+    id: homeassistant_time
+
+# Status LED configuration #
+output:
+  # - platform: gpio
+  #   pin: GPIO5
+  #   id: output_blue
+  - platform: gpio
+    pin: ${led_pin_red}
+    id: output_red
+  - platform: gpio
+    pin: ${led_pin_green}
+    id: output_green
+
+light:
+  - platform: binary
+    internal: true
+    id: led_red
+    name: Red
+    output: output_red
+
+# Status LED for connection
+status_led:
+  pin:
+    # Blue LED
+    number: ${status_led}
+
+
+
+# Pulse meter configuration #
+
+number:
+  # Set the pulse rate of the LED on your meter
+  - platform: template
+    id: select_pulse_rate
+    name: 'Puls rate - imp/kWh'
+    optimistic: true
+    mode: box
+    min_value: 100
+    max_value: 10000
+    step: 100
+    restore_value: yes
+    initial_value: 1000
+
+  # Reset total energy to given value
+  - platform: template
+    id: select_reset_total
+    name: 'Reset Value - Total Energy kWh'
+    entity_category: config
+    optimistic: true
+    mode: box
+    min_value: 0
+    max_value: 1000000
+    step: 1
+    initial_value: 0
+
+button:
+  # Restart the ESP
+  - platform: restart
+    name: "Restart - Glow"
+  # Reset the total energy entity
+  - platform: template
+    id: button_reset_total
+    name: "Reset - Total Energy"
+    on_press:
+      - pulse_meter.set_total_pulses:
+          id: sensor_energy_pulse_meter
+          value: !lambda "return id(select_reset_total).state * id(select_pulse_rate).state;"
+
+
+# Sensors for ESP version and WIFI information
+text_sensor:
+  # Installed version
+  - platform: template
+    name: "Glow - Installed version"
+    id: glow_version
+    icon: "mdi:label-outline"
+    entity_category: diagnostic
+    lambda: |-
+      return {"${project_version}"};
+    update_interval: 6h
+  # ESPHome version
+  - platform: version
+    hide_timestamp: true
+    name: '${friendly_name} - ESPHome Version'
+  # IP address and connected SSID
+  - platform: wifi_info
     ip_address:
-      name: 'IP Address'
+      name: '${friendly_name} - IP Address'
       icon: mdi:wifi
     ssid:
-      name: 'Connected SSID'
+      name: '${friendly_name} - Connected SSID'
       icon: mdi:wifi-strength-2
-      
-sensor:    ############### The following sensors are examples. Adapt the sensors to the meters you have (according to the instructions) and remove the others.###############
-    # Reports the WiFi signal strength/RSSI in dB
-  - platform: wifi_signal 
-    name: "WiFi Signal dB"
-    id: wifi_signal_db
-    update_interval: 60s
-    entity_category: "diagnostic"
-# first sensor (water)
-  - platform: wmbus
-    meter_id: 0x00000000
-    type: izar
-    add_prefix: false
-    lqi:
-      name: "My lqi"
-    rssi:
-      name: "My RSSI"
-    total_water_m3:
-      name: "My cold water"
-   #  filters:              #optional
-   #    - offset: 123.4567  #the difference between the indications of the radio overlay and the counter (if you have a used overlay)
-    last_month_total_water_m3:
-      name: "Last month total water"
-    current_month_total_water_l:
-      name: "Current month total water"
-    transmit_period_s:
-      name: "Transmit period [s]"
-    remaining_battery_life_y:
-      name: "Remaining battery life [Y]"
-    current_alarms:
-      name: "Current alarms"
-    previous_alarms:
-      name: "Previous alarms"
-  # second sensor (water)
-  - platform: wmbus
-    meter_id: 0x00000000
-    type: apator162
-    add_prefix: false
-    key: "00000000000000000000000000000000"
-    lqi:
-      name: "My lqi"
-    rssi:
-      name: "My RSSI"
-    total_water_m3:
-      name: "My cold water"
-  # third sensor (gas)
-  - platform: wmbus
-    meter_id: 0x00000000
-    type: unismart
-    add_prefix: false
-    key: "00000000000000000000000000000000"
-    lqi:
-      name: "My lqi"
-    rssi:
-      name: "My RSSI"
-    total_gas_m3:
-      name: "My gas"
-  # fourth sensor (electricity)
-  - platform: wmbus
-    meter_id: 0x00000000
-    type: amiplus
-    add_prefix: false
-    mode: T1C1
-    rssi:
-      name: "My RSSI"
-    total_energy_consumption_kwh:
-      name: "My consumption in kWh"
-      icon: "mdi:power-plug"
-    current_power_consumption_kw:
-      name: "My current power consumption in kW"
-    total_energy_production_kwh:
-      name: "My total energy production in kWh"
-    current_power_production_kw:
-      name: "My current power production in kW"
-    voltage_at_phase_1_v:
-      name: "My V1"
-    voltage_at_phase_2_v:
-      name: "My V2"
-    voltage_at_phase_3_v:
-      name: "My V3"
-  # more options on https://github.com/SzczepanLeon/esphome-components
+
+
+sensor:
+ # WiFi signal
+  - platform: wifi_signal
+    name: "${friendly_name} - WiFi Signal"
+    update_interval: 120s
+  # Pulse meter
+  - platform: pulse_meter
+    id: sensor_energy_pulse_meter
+    name: '${friendly_name} - Power Consumption'
+    unit_of_measurement: W
+    state_class: measurement
+    device_class: power
+    icon: mdi:flash-outline
+    accuracy_decimals: 0
+    pin: ${pulse_pin}
+    on_raw_value:
+      then:
+        - light.turn_on:
+            id: led_red
+        - delay: 0.2s
+        - light.turn_off:
+            id: led_red
+    filters:
+      # multiply value = (60 / imp value) * 1000
+      # - multiply: 60
+      - lambda: return x * ((60.0 / id(select_pulse_rate).state) * 1000.0);
+
+    total:
+      id: sensor_total_energy
+      name: '${friendly_name} - Total Energy'
+      unit_of_measurement: kWh
+      icon: mdi:circle-slice-3
+      state_class: total_increasing
+      device_class: energy
+      accuracy_decimals: 3
+      filters:
+        # multiply value = 1 / imp value
+        # - multiply: 0.001
+        - lambda: return x * (1.0 / id(select_pulse_rate).state);
+
+  # Total day usage
+  - platform: total_daily_energy
+    id: sensor_total_daily_energy
+    name: '${friendly_name} - Daily Energy'
+    power_id: sensor_energy_pulse_meter
+    unit_of_measurement: kWh
+    icon: mdi:circle-slice-3
+    state_class: total_increasing
+    device_class: energy
+    accuracy_decimals: 3
+    filters:
+      # Multiplication factor from W to kW is 0.001
+      - multiply: 0.001
