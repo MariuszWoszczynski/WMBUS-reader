@@ -59,10 +59,10 @@ wifi:
   reboot_timeout: 10min
   output_power: 18dB
 #  static IP configuration (instead of data from the secret file)
-  manual_ip:
-    static_ip: 192.168.10.99
-    gateway: 192.168.10.1
-    subnet: 255.255.255.0
+#  manual_ip:
+#    static_ip: 192.168.10.200
+#    gateway: 192.168.10.1
+#    subnet: 255.255.255.0
   
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
