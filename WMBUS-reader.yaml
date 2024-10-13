@@ -109,7 +109,7 @@ sensor:
   - platform: wifi_signal # Reports the WiFi signal strength/RSSI in dB
     name: "WiFi Signal dB"
     id: wifi_signal_db
-    update_interval: 5s
+    update_interval: 60s
     entity_category: "diagnostic"
 
   - platform: copy # Reports the WiFi signal strength in %
