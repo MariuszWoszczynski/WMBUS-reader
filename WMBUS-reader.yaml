@@ -25,7 +25,9 @@ external_components:
     components: [ wmbus ]
     refresh: 0d
     
-    
+mdns:
+  disabled: false
+  
 time:
  - platform: sntp
    id: time_sntp
