@@ -51,13 +51,10 @@ wifi:
   reboot_timeout: 10min
   output_power: 18dB
 #  static IP configuration (instead of data from the secret file)
-#  ssid: "MY_WIFI"
-#  password: "0123456789"
-#  reboot_timeout: 10min
-#  manual_ip:
-#    static_ip: 192.168.1.99
-#    gateway: 192.168.1.1
-#    subnet: 255.255.255.0
+  manual_ip:
+    static_ip: 192.168.10.99
+    gateway: 192.168.10.1
+    subnet: 255.255.255.0
   
   # Enable fallback hotspot (captive portal) in case wifi connection fails
   ap:
@@ -76,17 +73,22 @@ captive_portal:
 web_server: 
   port: 80
   version: 3
-  
+
 wmbus:
+  frequency: 868.950  #default
+  sync_mode: False    #default
+  log_unknown: true   #default
+
   mosi_pin: GPIO32
   clk_pin:  GPIO33 
   miso_pin: GPIO19
   gdo2_pin: GPIO21
   gdo0_pin: GPIO22
   cs_pin:   GPIO23
-#  log_unknown: true
+
   led_pin: GPIO2
   led_blink_time: "1s"
+
 
 text_sensor: 
     #diagnostic info
@@ -97,14 +99,25 @@ text_sensor:
     ssid:
       name: 'Connected SSID'
       icon: mdi:wifi-strength-2
-      
-sensor:    ############### The following sensors are examples. Adapt the sensors to the meters you have (according to the instructions) and remove the others.###############
-    # Reports the WiFi signal strength/RSSI in dB
-  - platform: wifi_signal 
+
+sensor:   
+  - platform: wifi_signal # Reports the WiFi signal strength/RSSI in dB
     name: "WiFi Signal dB"
     id: wifi_signal_db
-    update_interval: 60s
+    update_interval: 5s
     entity_category: "diagnostic"
+
+  - platform: copy # Reports the WiFi signal strength in %
+    source_id: wifi_signal_db
+    name: "WiFi Signal Percent"
+    filters:
+      - lambda: return min(max(2 * (x + 100.0), 0.0), 100.0);
+    unit_of_measurement: "Signal %"
+    entity_category: "diagnostic"
+
+
+ ############### The following sensors are examples. Adapt the sensors to the meters you have (according to the instructions) and remove the others.###############
+
 # first sensor (water)
   - platform: wmbus
     meter_id: 0x00000000
