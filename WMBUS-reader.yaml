@@ -24,6 +24,12 @@ external_components:
   - source: github://SzczepanLeon/esphome-components@3.2.3
     components: [ wmbus ]
     refresh: 0d
+
+# Status LED for connection
+status_led:
+  pin:
+    # Blue LED
+    number: GPIO02
     
 mdns:
   disabled: false
@@ -87,9 +93,6 @@ wmbus:
   gdo2_pin: GPIO21
   gdo0_pin: GPIO22
   cs_pin:   GPIO23
-
-  led_pin: GPIO2
-  led_blink_time: "1s"
 
 
 text_sensor: 
