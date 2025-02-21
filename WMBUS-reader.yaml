@@ -82,7 +82,7 @@ web_server:
 wmbus:
   frequency: 868.950  #default
   sync_mode: False    #default
-#  log_unknown: true   #default
+  log_unknown: true   #default
 
   mosi_pin: GPIO32
   clk_pin:  GPIO33 
