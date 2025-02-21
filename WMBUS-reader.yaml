@@ -21,7 +21,7 @@ esp32:
     type: arduino
 
 external_components:
-  - source: github://SzczepanLeon/esphome-components@3.2.3
+  - source: github://SzczepanLeon/esphome-components@version_3
     components: [ wmbus ]
     refresh: 0d
 
@@ -82,7 +82,7 @@ web_server:
 wmbus:
   frequency: 868.950  #default
   sync_mode: False    #default
-  log_unknown: true   #default
+#  log_unknown: true   #default
 
   mosi_pin: GPIO32
   clk_pin:  GPIO33 
