@@ -18,6 +18,11 @@ esp32:
   framework:
     type: arduino
 
+#####  NOTE!!! In the external_components section there is a link to always the latest version of the repository. 
+#####  If there will be any changes to the software, user intervention may be required 
+#####  (e.g. changing the way sensors are configured, etc.). 
+#####  Therefore, it is advisable to follow the information on the site of the author of the software:
+#####  https://github.com/SzczepanLeon/esphome-components
 external_components:
   - source: github://SzczepanLeon/esphome-components@main
     components: [ wmbus ]
