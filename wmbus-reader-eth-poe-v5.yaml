@@ -1,0 +1,189 @@
+dashboard_import:
+  package_import_url: github://MariuszWoszczynski/wmbus-reader-eth-poe/wmbus-reader-eth-poe-v5.yaml@main
+  import_full_config: true
+
+substitutions:
+  name: "wmbus-reader-eth-poe-v5"
+  friendly_name: "WMBUS Reader ETH POE v5"
+
+esphome:
+  name: "${name}"
+  friendly_name: "${friendly_name}"
+  project:
+    name: esphome.wmbus_reader_eth
+    version: "1.0"
+
+esp32:
+  board: esp32-poe
+  framework:
+    type: esp-idf
+
+
+#####  NOTE!!! In the external_components section there is a link to always the latest version of the repository. 
+#####  If there will be any changes to the software, user intervention may be required 
+#####  (e.g. changing the way sensors are configured, etc.). 
+#####  Therefore, it is advisable to follow the information on the site of the author of the software:
+#####  https://github.com/SzczepanLeon/esphome-components
+
+external_components:
+  - source: github://SzczepanLeon/esphome-components@main
+    
+time:
+ - platform: sntp
+   id: time_sntp
+
+# Enable logging
+logger:
+
+# Enable Home Assistant API
+api:
+  encryption:
+    key: "eDNPgLXatKFNoUix14VnAxQ4o+e8YnZVWADNU92wRvo="
+
+ota:
+  - platform: esphome
+
+mdns:
+  disabled: false
+  
+web_server: 
+  port: 80
+  version: 3
+
+ethernet:  
+  type: LAN8720
+  mdc_pin: GPIO23
+  mdio_pin: GPIO18
+  clk_mode: GPIO17_OUT
+  phy_addr: 0
+  power_pin: GPIO12
+#Optional manual IP
+#  manual_ip:
+#    static_ip: 192.168.10.99
+#    gateway: 192.168.10.1
+#    subnet: 255.255.255.0
+
+
+spi:
+  clk_pin:  GPIO14
+  mosi_pin: GPIO02
+  miso_pin: GPIO15
+  
+wmbus_radio:
+  radio_type: SX1276
+  cs_pin:   GPIO05  
+  reset_pin: GPIO16 
+  irq_pin: GPIO13
+
+##############################################################################################################################################################################
+##############################################################################################################################################################################
+# The following sensors are examples, for IZAR, APATOR, UNISMART, Heat and Electricity meters. Leave only the configuration of such meters you have, delete the other sensors. 
+# If you have another meter, check its configuration on:  https://github.com/SzczepanLeon/esphome-components
+##############################################################################################################################################################################
+##############################################################################################################################################################################
+
+############################# Define counters here (typ, ID, key, mode...) ###############################
+wmbus_meter:
+  - id: water_meter_izar
+    meter_id: 0x00000000  ######## enter your IZAR meter ID here ###########
+    type: izar
+  - id: water_meter_apator
+    meter_id: 0x00000000  ######## enter your APATOR meter ID here ###########
+    type: apator162
+    key: "00000000000000000000000000000000"
+  - id: gas_meter_unismart
+    meter_id: 0x00000000  ######## enter your UNISMART meter ID here ###########
+    type: unismart
+    key: "00000000000000000000000000000000"
+  - id: electricity_meter
+    meter_id: 0x00000000  ######## enter your ELECTRICITY meter ID here ###########
+    type: amiplus
+    key: "01012132131465465432131313151531"  ######## enter your key here ###########
+    mode: 
+      - T1
+      - C1
+  - id: heat_meter
+    meter_id: 0x00000000  ######## enter your HEAT meter ID here ###########
+    type: hydrocalm3
+
+########################### Define sensors here #####################################
+sensor:
+  - platform: wmbus_meter 
+    parent_id: water_meter_izar  #Water meter Izar
+    field: total_m3
+    device_class: water
+    name: Izar water meter - state
+    accuracy_decimals: 2
+    state_class: total_increasing
+    unit_of_measurement: "m³"
+  - platform: wmbus_meter
+    parent_id: water_meter_izar
+    field: rssi_dbm
+    name: Izar water meter - RSSI
+    unit_of_measurement: "dBm"
+
+  - platform: wmbus_meter
+    parent_id: water_meter_apator #Water meter Apator
+    field: total_m3
+    device_class: water
+    name: Apator water meter - state
+    accuracy_decimals: 2
+    state_class: total_increasing
+    unit_of_measurement: "m³"
+  - platform: wmbus_meter
+    parent_id: water_meter_apator
+    field: rssi_dbm
+    name: Apator water meter - RSSI
+    unit_of_measurement: "dBm"
+
+  - platform: wmbus_meter
+    parent_id: gas_meter_unismart #Water meter Unismart
+    field: total_m3
+    device_class: water
+    name: Unismart gas meter - state
+    accuracy_decimals: 2
+    state_class: total_increasing
+    unit_of_measurement: "m³"
+  - platform: wmbus_meter
+    parent_id: gas_meter_unismart
+    field: rssi_dbm
+    name: RSSI licznika gazu Unismart V5
+    unit_of_measurement: "dBm"
+
+  - platform: wmbus_meter #Heat meter
+    parent_id: heat_meter
+    field: total_heating_kwh
+    device_class: energy
+    name: Heat meter - state
+    accuracy_decimals: 4
+    state_class: total_increasing
+  - platform: wmbus_meter
+    parent_id: heat_meter
+    field: rssi_dbm
+    name: Heat Meter - RSSI
+
+  - platform: wmbus_meter #Electicity meter
+    parent_id: electricity_meter
+    field: current_power_consumption_kw
+    name: Electricity Meter - current power
+    accuracy_decimals: 0
+    device_class: power
+    unit_of_measurement: W
+    state_class: measurement
+    filters:
+      - multiply: 1000
+  - platform: wmbus_meter
+    parent_id: electricity_meter
+    field: total_energy_consumption_kwh
+    name: Electricity Meter - energy consumption
+    accuracy_decimals: 3
+    device_class: energy
+    state_class: total_increasing
+  - platform: wmbus_meter
+    parent_id: electricity_meter
+    field: rssi_dbm
+    name: Electricity Meter RSSI
+
+#######################################################################################
+
+# More info on https://github.com/SzczepanLeon/esphome-components
