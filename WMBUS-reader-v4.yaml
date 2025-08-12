@@ -201,5 +201,29 @@ sensor:
         icon: "mdi:water"
         #filters:       #optional    
         #  - offset: 991.10   
-
+# AMIPLUS energy meter (eg. OTUS3, GAMA350)
+  - platform: wmbus
+    meter_id: 0x00000000        ######## enter your AMPIPLUS meter ID here ###########
+    type: amiplus
+    sensors:
+      - name: "my current power consumption in Watts"
+        field: "current_power_consumption"
+        accuracy_decimals: 1
+        unit_of_measurement: "w"
+        device_class: "power"
+        state_class: "measurement"
+        icon: "mdi:transmission-tower-import"
+      - name: "total energy on T1"
+        field: "total_energy_consumption_tariff_1"
+        accuracy_decimals: 3
+        unit_of_measurement: "kwh"
+        device_class: "energy"
+        state_class: "total_increasing"
+        icon: "mdi:transmission-tower-import"
+      - name: "voltage_at_phase_1"
+        accuracy_decimals: 0
+        unit_of_measurement: "v"
+        device_class: "voltage"
+        state_class: "measurement"
+        icon: "mdi:sine-wave"
 
