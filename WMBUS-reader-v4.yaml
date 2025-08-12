@@ -206,24 +206,100 @@ sensor:
     meter_id: 0x00000000        ######## enter your AMPIPLUS meter ID here ###########
     type: amiplus
     sensors:
-      - name: "my current power consumption in Watts"
+      - name: "My current power consumption"
         field: "current_power_consumption"
         accuracy_decimals: 1
         unit_of_measurement: "w"
         device_class: "power"
         state_class: "measurement"
         icon: "mdi:transmission-tower-import"
-      - name: "total energy on T1"
+
+      - name: "Total energy consumption"
+        field: "total_energy_consumption"
+        accuracy_decimals: 3
+        unit_of_measurement: "kwh"
+        device_class: "energy"
+        state_class: "total_increasing"
+        icon: "mdi:transmission-tower-import"
+
+      - name: "Total energy consumption on T1"
         field: "total_energy_consumption_tariff_1"
         accuracy_decimals: 3
         unit_of_measurement: "kwh"
         device_class: "energy"
         state_class: "total_increasing"
         icon: "mdi:transmission-tower-import"
-      - name: "voltage_at_phase_1"
+
+      - name: "Total energy consumption on T2"
+        field: "total_energy_consumption_tariff_2"
+        accuracy_decimals: 3
+        unit_of_measurement: "kwh"
+        device_class: "energy"
+        state_class: "total_increasing"
+        icon: "mdi:transmission-tower-import"
+
+      - name: "Total energy consumption on T3"
+        field: "total_energy_consumption_tariff_3"
+        accuracy_decimals: 3
+        unit_of_measurement: "kwh"
+        device_class: "energy"
+        state_class: "total_increasing"
+        icon: "mdi:transmission-tower-import"
+
+      - name: "My current power production"
+        field: "current_power_production"
+        accuracy_decimals: 1
+        unit_of_measurement: "w"
+        device_class: "power"
+        state_class: "measurement"
+        icon: "mdi:transmission-tower-import"
+
+      - name: "Total energy production on T1"
+        field: "total_energy_production_tariff_1"
+        accuracy_decimals: 3
+        unit_of_measurement: "kwh"
+        device_class: "energy"
+        state_class: "total_increasing"
+        icon: "mdi:transmission-tower-import"
+
+      - name: "Total energy production on T2"
+        field: "total_energy_production_tariff_2"
+        accuracy_decimals: 3
+        unit_of_measurement: "kwh"
+        device_class: "energy"
+        state_class: "total_increasing"
+        icon: "mdi:transmission-tower-import"
+
+      - name: "Total energy production on T3"
+        field: "total_energy_production_tariff_3"
+        accuracy_decimals: 3
+        unit_of_measurement: "kwh"
+        device_class: "energy"
+        state_class: "total_increasing"
+        icon: "mdi:transmission-tower-import"
+
+      - name: "Voltage at phase 1"
+        field: "voltage_at_phase_1"
         accuracy_decimals: 0
         unit_of_measurement: "v"
         device_class: "voltage"
         state_class: "measurement"
         icon: "mdi:sine-wave"
+
+      - name: "Voltage at phase 2"
+        field: "voltage_at_phase_2"
+        accuracy_decimals: 0
+        unit_of_measurement: "v"
+        device_class: "voltage"
+        state_class: "measurement"
+        icon: "mdi:sine-wave"
+
+      - name: "Voltage at phase 3"
+        field: "voltage_at_phase_3"
+        accuracy_decimals: 0
+        unit_of_measurement: "v"
+        device_class: "voltage"
+        state_class: "measurement"
+        icon: "mdi:sine-wave"
+
 
