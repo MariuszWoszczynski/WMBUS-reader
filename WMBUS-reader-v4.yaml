@@ -209,7 +209,7 @@ sensor:
       - name: "My current power consumption"
         field: "current_power_consumption"
         accuracy_decimals: 1
-        unit_of_measurement: "w"
+        unit_of_measurement: "W"
         device_class: "power"
         state_class: "measurement"
         icon: "mdi:transmission-tower-import"
@@ -217,7 +217,7 @@ sensor:
       - name: "Total energy consumption"
         field: "total_energy_consumption"
         accuracy_decimals: 3
-        unit_of_measurement: "kwh"
+        unit_of_measurement: "kWh"
         device_class: "energy"
         state_class: "total_increasing"
         icon: "mdi:transmission-tower-import"
@@ -225,7 +225,7 @@ sensor:
       - name: "Total energy consumption on T1"
         field: "total_energy_consumption_tariff_1"
         accuracy_decimals: 3
-        unit_of_measurement: "kwh"
+        unit_of_measurement: "kWh"
         device_class: "energy"
         state_class: "total_increasing"
         icon: "mdi:transmission-tower-import"
@@ -233,7 +233,7 @@ sensor:
       - name: "Total energy consumption on T2"
         field: "total_energy_consumption_tariff_2"
         accuracy_decimals: 3
-        unit_of_measurement: "kwh"
+        unit_of_measurement: "kWh"
         device_class: "energy"
         state_class: "total_increasing"
         icon: "mdi:transmission-tower-import"
@@ -241,7 +241,7 @@ sensor:
       - name: "Total energy consumption on T3"
         field: "total_energy_consumption_tariff_3"
         accuracy_decimals: 3
-        unit_of_measurement: "kwh"
+        unit_of_measurement: "kWh"
         device_class: "energy"
         state_class: "total_increasing"
         icon: "mdi:transmission-tower-import"
@@ -249,7 +249,7 @@ sensor:
       - name: "My current power production"
         field: "current_power_production"
         accuracy_decimals: 1
-        unit_of_measurement: "w"
+        unit_of_measurement: "W"
         device_class: "power"
         state_class: "measurement"
         icon: "mdi:transmission-tower-import"
@@ -257,7 +257,7 @@ sensor:
       - name: "Total energy production on T1"
         field: "total_energy_production_tariff_1"
         accuracy_decimals: 3
-        unit_of_measurement: "kwh"
+        unit_of_measurement: "kWh"
         device_class: "energy"
         state_class: "total_increasing"
         icon: "mdi:transmission-tower-import"
@@ -265,7 +265,7 @@ sensor:
       - name: "Total energy production on T2"
         field: "total_energy_production_tariff_2"
         accuracy_decimals: 3
-        unit_of_measurement: "kwh"
+        unit_of_measurement: "kWh"
         device_class: "energy"
         state_class: "total_increasing"
         icon: "mdi:transmission-tower-import"
@@ -273,7 +273,7 @@ sensor:
       - name: "Total energy production on T3"
         field: "total_energy_production_tariff_3"
         accuracy_decimals: 3
-        unit_of_measurement: "kwh"
+        unit_of_measurement: "kWh"
         device_class: "energy"
         state_class: "total_increasing"
         icon: "mdi:transmission-tower-import"
@@ -281,7 +281,7 @@ sensor:
       - name: "Voltage at phase 1"
         field: "voltage_at_phase_1"
         accuracy_decimals: 0
-        unit_of_measurement: "v"
+        unit_of_measurement: "V"
         device_class: "voltage"
         state_class: "measurement"
         icon: "mdi:sine-wave"
@@ -289,7 +289,7 @@ sensor:
       - name: "Voltage at phase 2"
         field: "voltage_at_phase_2"
         accuracy_decimals: 0
-        unit_of_measurement: "v"
+        unit_of_measurement: "V"
         device_class: "voltage"
         state_class: "measurement"
         icon: "mdi:sine-wave"
@@ -297,9 +297,7 @@ sensor:
       - name: "Voltage at phase 3"
         field: "voltage_at_phase_3"
         accuracy_decimals: 0
-        unit_of_measurement: "v"
+        unit_of_measurement: "V"
         device_class: "voltage"
         state_class: "measurement"
         icon: "mdi:sine-wave"
-
-
