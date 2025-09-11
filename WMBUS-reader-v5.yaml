@@ -93,6 +93,10 @@ wmbus_radio:
   irq_pin: GPIO21
   on_frame:
     - then:
+        - logger.log:
+            format: "RSSI: %ddBm T: %s (%d)"
+            args: [ frame->rssi(), frame->as_hex().c_str(), frame->data().size() ]
+    - then:
         - repeat:
             count: 1
             then:
