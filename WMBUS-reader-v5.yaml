@@ -29,7 +29,7 @@ external_components:
 
 
 
-#If you are using esphome 2025.12.0, use this external_components configuration: 
+#If you are using esphome above 2025.12.0, use this external_components configuration: 
 #external_components:
 #  - source: github://SzczepanLeon/esphome-components@main
 #    components:
