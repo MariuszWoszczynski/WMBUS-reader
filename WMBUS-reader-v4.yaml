@@ -25,11 +25,8 @@ esp32:
 #####  https://github.com/SzczepanLeon/esphome-components
 external_components:
   - source: github://SzczepanLeon/esphome-components@version_4
-    components:
-      - socket_transmitter
-      - wmbus_common
-      - wmbus_radio
-      - wmbus_meter
+    components: [ wmbus ]
+    refresh: 0d
 
 # Status LED for connection
 status_led:
