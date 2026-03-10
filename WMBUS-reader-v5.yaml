@@ -25,14 +25,18 @@ esp32:
 #####  https://github.com/SzczepanLeon/esphome-components
 
 external_components:
-  - source: github://SzczepanLeon/esphome-components@main
+  - source:
+      type: git
+      url: https://github.com/IoTLabs-pl/esphome-components
+
+#### Alternatywnie####
+external_components:
+  - source: github://SzczepanLeon/esphome-components@main  #lub @5.0.4 zamiast @main
     components:
       - socket_transmitter
       - wmbus_common
       - wmbus_radio
       - wmbus_meter
-
-
       
 mdns:
   disabled: false
