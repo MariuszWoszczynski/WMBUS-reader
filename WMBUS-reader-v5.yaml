@@ -25,7 +25,7 @@ external_components:
       type: git
       url: https://github.com/IoTLabs-pl/esphome-components
 # alternatively
-#  - source: github://SzczepanLeon/esphome-components@main  #or @5.0.4 zamiast @main
+#  - source: github://SzczepanLeon/esphome-components@main  #or @5.0.4 
 #    components:
 #      - socket_transmitter
 #      - wmbus_common
@@ -42,7 +42,7 @@ time:
 
 # Enable logging
 logger:
-  level: info
+  level: debug
 
 # Enable Home Assistant API
 api:
