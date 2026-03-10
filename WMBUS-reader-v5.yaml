@@ -18,21 +18,14 @@ esp32:
   framework:
     type: esp-idf
 
-#####  NOTE!!! In the external_components section there is a link to always the latest version of the repository. 
-#####  If there will be any changes to the software, user intervention may be required 
-#####  (e.g. changing the way sensors are configured, etc.). 
-#####  Therefore, it is advisable to follow the information on the site of the author of the software:
-#####  https://github.com/SzczepanLeon/esphome-components
+
 
 external_components:
   - source:
       type: git
       url: https://github.com/IoTLabs-pl/esphome-components
-
-
-########################## Alternatywnie###############
-#external_components:
-#  - source: github://SzczepanLeon/esphome-components@main  #lub @5.0.4 zamiast @main
+# alternatively
+#  - source: github://SzczepanLeon/esphome-components@main  #or @5.0.4 zamiast @main
 #    components:
 #      - socket_transmitter
 #      - wmbus_common
@@ -120,7 +113,6 @@ wmbus_radio:
 ##############################################################################################################################################################################
 ##############################################################################################################################################################################
 # The following sensors are examples, for IZAR, APATOR, UNISMART, Heat and Electricity meters. Leave only the configuration of such meters you have, delete the other sensors. 
-# If you have another meter, check its configuration on:  https://github.com/SzczepanLeon/esphome-components
 ##############################################################################################################################################################################
 ##############################################################################################################################################################################
 
@@ -141,9 +133,6 @@ wmbus_meter:
     meter_id: 0x00000000  ######## enter your ELECTRICITY meter ID here ###########
     type: amiplus
     key: "01012132131465465432131313151531"  ######## enter your key here ###########
-    mode: 
-      - T1
-      - C1
   - id: heat_meter
     meter_id: 0x00000000  ######## enter your HEAT meter ID here ###########
     type: hydrocalm3
