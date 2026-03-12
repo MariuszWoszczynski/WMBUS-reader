@@ -119,22 +119,22 @@ wmbus_radio:
 ############################# Define counters here (typ, ID, key, mode...) ###############################
 wmbus_meter:
   - id: water_meter_izar
-    meter_id: 0x00000000  ######## enter your IZAR meter ID here ###########
+    meter_id: 00000000  ######## enter your IZAR meter ID here ###########   #0x00000000  #ID format for SzczepanLeon
     type: izar
   - id: water_meter_apator
-    meter_id: 0x00000000  ######## enter your APATOR meter ID here ###########
+    meter_id: 00000000  ######## enter your APATOR meter ID here ###########    #0x00000000  #ID format for SzczepanLeon
     type: apator162
     key: "00000000000000000000000000000000"
   - id: gas_meter_unismart
-    meter_id: 0x00000000  ######## enter your UNISMART meter ID here ###########
+    meter_id: 00000000  ######## enter your UNISMART meter ID here ###########     #0x00000000  #ID format for SzczepanLeon
     type: unismart
     key: "00000000000000000000000000000000"
   - id: electricity_meter
-    meter_id: 0x00000000  ######## enter your ELECTRICITY meter ID here ###########
+    meter_id: 00000000  ######## enter your ELECTRICITY meter ID here ###########    #0x00000000  #ID format for SzczepanLeon
     type: amiplus
     key: "01012132131465465432131313151531"  ######## enter your key here ###########
   - id: heat_meter
-    meter_id: 0x00000000  ######## enter your HEAT meter ID here ###########
+    meter_id: 00000000  ######## enter your HEAT meter ID here ###########    #0x00000000  #ID format for SzczepanLeon
     type: hydrocalm3
 
 ########################### Define sensors here #####################################
