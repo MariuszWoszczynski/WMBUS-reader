@@ -23,16 +23,25 @@ esp32:
 #####  (e.g. changing the way sensors are configured, etc.). 
 #####  Therefore, it is advisable to follow the information on the site of the author of the software:
 #####  https://github.com/SzczepanLeon/esphome-components
+
+
 external_components:
-  - source: github://SzczepanLeon/esphome-components@version_4
+  - source:
+      type: git
+      url: https://github.com/SzczepanLeon/esphome-components
+      ref: da93cbe36e22dcd2e1cce9acd3e8acee3f977cf2
     components: [ wmbus ]
     refresh: 0d
+#  - source: github://SzczepanLeon/esphome-components@version_4
+#    components: [ wmbus ]
+#    refresh: 0d
 
 # Status LED for connection
 status_led:
   pin:
     # Blue LED
     number: GPIO02
+    ignore_strapping_warning: true   
     
 mdns:
   disabled: false
