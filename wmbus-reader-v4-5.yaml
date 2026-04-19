@@ -114,7 +114,7 @@ wmbus_radio:
 ##############################################################################################################################################################################
 ##############################################################################################################################################################################
 # The following sensors are examples, for IZAR, APATOR, UNISMART, Heat and Electricity meters. Leave only the configuration of such meters you have, delete the other sensors. 
-# If you have another meter, check its configuration on:  https://github.com/SzczepanLeon/esphome-components
+# If you have another meter, check its configuration on:  https://github.com/SzczepanLeon/esphome-components ora https://github.com/IoTLabs-pl/esphome-components
 ##############################################################################################################################################################################
 ##############################################################################################################################################################################
 
