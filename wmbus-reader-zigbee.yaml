@@ -1,0 +1,244 @@
+dashboard_import: 
+  package_import_url: github://MariuszWoszczynski/WMBUS-reader/WMBUS-reader-zigbee.yaml@main 
+  import_full_config: true
+
+substitutions:
+  name: "wmbus-reader-zigbee"
+  friendly_name: "WMBUS Reader Zigbee"
+
+
+esphome:
+  name: "${name}"
+  friendly_name: "${friendly_name}"
+
+  # Natywna obsługa Zigbee na ESP32-C6 wymaga ESPHome 2026.5.0+
+  min_version: 2026.5.0
+
+  project:
+    name: esphome.wmbus_reader
+    version: "1.0"
+
+esp32:
+  board: esp32-c6-devkitm-1
+  flash_size: 8MB
+  framework:
+    type: esp-idf
+    sdkconfig_options:
+      CONFIG_MBEDTLS_HARDWARE_SHA: "n"
+
+# Enable logging
+logger:
+  level: DEBUG
+
+
+# ESPHome API pozostaje do adopcji, logów i obsługi z Dashboardu
+api:
+  encryption:
+    key: "IAHzf/W7ltjO0oJPBxXC0k7YCXPKRpLmLU4lOnizC9Q="
+
+ota:
+  - platform: esphome
+
+# Wi-Fi pozostaje w trybie station:
+# ESPHome Dashboard, API, OTA, web_server i SNTP nadal działają.
+wifi:
+  ssid: !secret wifi_ssid
+  password: !secret wifi_password
+  output_power: 18dB
+  
+  # Nie dodawaj tutaj sekcji "ap:".
+  # Wi-Fi Access Point nie jest obsługiwany równocześnie z Zigbee.
+  #ap:
+  #  ssid: "Wmbus-Reader-V5 Fallback Hotspot"
+
+
+
+  # Nie dodajemy captive_portal,
+# ponieważ wymaga fallbackowego punktu dostępowego Wi-Fi.
+#captive_portal:
+
+
+external_components:
+  - source:
+      type: git
+      url: https://github.com/IoTLabs-pl/esphome-components
+  - source: github://pr#17402   #w nowej wersji esphome (od 2026.7.0) ma to być już zaimplementowane, więc można będzie usunąć.
+    components:
+      - zigbee
+    refresh: 1h
+
+    
+mdns:
+  disabled: false
+
+time:
+  - platform: sntp
+    id: time_sntp
+
+web_server:
+  port: 80
+  version: 3
+
+# ESP32-C6 działa jako urządzenie końcowe Zigbee.
+# Nie ustawiaj router: true przy stale aktywnym Wi-Fi.
+zigbee:
+  id: zigbee_node
+  model: "WMBUS Reader V5"
+  router: false
+  power_source: DC_SOURCE
+
+light:
+  - platform: esp32_rmt_led_strip
+    id: radio_rgb_led
+    pin: GPIO8
+    name: "Test RGB"
+    num_leds: 1
+    chipset: WS2812
+    rgb_order: GRB
+    internal: true
+    restore_mode: ALWAYS_OFF
+    default_transition_length: 0s
+
+
+# Pinout ESP32-C6 -> SX1276:
+# GPIO18 -> SCK
+# GPIO19 -> MISO
+# GPIO20 -> MOSI
+# GPIO23 -> NSS / CS
+# GPIO22 -> RESET
+# GPIO21 -> DIO1 / IRQ
+# 3V3    -> VCC
+# GND    -> GND
+
+spi:
+  clk_pin: GPIO18
+  mosi_pin: GPIO20
+  miso_pin: GPIO19
+
+wmbus_radio:
+  radio_type: SX1276
+  cs_pin: GPIO23
+  reset_pin: GPIO22
+  irq_pin: GPIO21
+
+  on_frame:
+    - then:
+        - logger.log:
+            format: "RSSI: %ddBm T: %s (%d)"
+            args:
+              - frame->rssi()
+              - frame->as_hex().c_str()
+              - frame->data().size()
+
+    - then:
+        - repeat:
+            count: 1
+            then:
+              - light.turn_on:
+                  id: radio_rgb_led
+                  red: 0%
+                  green: 0%
+                  blue: 100%
+                  brightness: 100%
+                  transition_length: 0s
+          
+              - delay: 100ms
+          
+              - light.turn_off:
+                  id: radio_rgb_led
+                  transition_length: 0s
+
+######################################################################
+# Definicje liczników
+######################################################################
+
+wmbus_meter:
+  - id: water_meter_izar
+    meter_id: "414FDFAC"  ######## enter your IZAR meter ID here ###########
+    type: izar
+  - id: water_meter_apator
+    meter_id: "07208205"  ######## enter your APATOR meter ID here ###########
+    type: apator162
+    key: "00000000000000000000000000000000"
+  - id: gas_meter_unismart
+    meter_id: "00062651"  ######## enter your UNISMART meter ID here ###########
+    type: unismart
+    key: "00000000000000000000000000000000"
+
+
+
+button:
+  - platform: restart
+    name: "Restart urządzenia"
+    entity_category: diagnostic
+
+
+
+
+######################################################################
+# Sensory
+#
+# Każdy nazwany sensor zostanie wystawiony:
+# 1. przez ESPHome API,
+# 2. przez Zigbee do ZHA albo Zigbee2MQTT.
+######################################################################
+
+sensor:
+  - platform: wmbus_meter
+    parent_id: water_meter_izar
+    field: total_m3
+    device_class: water
+    name: "Izar water meter - state"
+    accuracy_decimals: 2
+    state_class: total_increasing
+    unit_of_measurement: "m³"
+    endpoint: 1
+    report: force
+    
+  - platform: wmbus_meter
+    parent_id: water_meter_izar
+    field: rssi_dbm
+    name: "Izar water meter - RSSI"
+    unit_of_measurement: "dBm"
+    endpoint: 2
+    report: force
+
+  - platform: wmbus_meter
+    parent_id: water_meter_apator
+    field: total_m3
+    device_class: water
+    name: "Apator water meter - state"
+    accuracy_decimals: 2
+    state_class: total_increasing
+    unit_of_measurement: "m³"
+    endpoint: 3
+    report: force
+    
+  - platform: wmbus_meter
+    parent_id: water_meter_apator
+    field: rssi_dbm
+    name: "Apator water meter - RSSI"
+    unit_of_measurement: "dBm"
+    endpoint: 4
+    report: force
+
+  - platform: wmbus_meter
+    parent_id: gas_meter_unismart
+    field: total_m3
+    device_class: water
+    name: "Unismart gas meter - state"
+    accuracy_decimals: 2
+    state_class: total_increasing
+    unit_of_measurement: "m³"
+    filters:
+      - offset: 991.10
+    report: force
+    endpoint: 5
+    
+  - platform: wmbus_meter
+    parent_id: gas_meter_unismart
+    field: rssi_dbm
+    name: "RSSI licznika gazu Unismart V5"
+    unit_of_measurement: "dBm"
+    endpoint: 6
+    report: force
