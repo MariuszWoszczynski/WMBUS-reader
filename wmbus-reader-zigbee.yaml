@@ -6,14 +6,9 @@ substitutions:
   name: "wmbus-reader-zigbee"
   friendly_name: "WMBUS Reader Zigbee"
 
-
 esphome:
   name: "${name}"
   friendly_name: "${friendly_name}"
-
-  # Natywna obsługa Zigbee na ESP32-C6 wymaga ESPHome 2026.5.0+
-  min_version: 2026.5.0
-
   project:
     name: esphome.wmbus_reader
     version: "1.0"
@@ -30,7 +25,6 @@ esp32:
 logger:
   level: DEBUG
 
-
 # ESPHome API pozostaje do adopcji, logów i obsługi z Dashboardu
 api:
   encryption:
@@ -39,8 +33,7 @@ api:
 ota:
   - platform: esphome
 
-# Wi-Fi pozostaje w trybie station:
-# ESPHome Dashboard, API, OTA, web_server i SNTP nadal działają.
+# Wi-Fi pozostaje w trybie station. Można całkowicie wyłączyć przy korzystaniu z Zigbee, ale może również działać jednocześnie
 wifi:
   ssid: !secret wifi_ssid
   password: !secret wifi_password
@@ -48,15 +41,7 @@ wifi:
   
   # Nie dodawaj tutaj sekcji "ap:".
   # Wi-Fi Access Point nie jest obsługiwany równocześnie z Zigbee.
-  #ap:
-  #  ssid: "Wmbus-Reader-V5 Fallback Hotspot"
-
-
-
-  # Nie dodajemy captive_portal,
-# ponieważ wymaga fallbackowego punktu dostępowego Wi-Fi.
-#captive_portal:
-
+  # Nie dodajemy również captive_portal, bo wymaga AP
 
 external_components:
   - source:
@@ -66,7 +51,6 @@ external_components:
     components:
       - zigbee
     refresh: 1h
-
     
 mdns:
   disabled: false
@@ -99,6 +83,10 @@ light:
     restore_mode: ALWAYS_OFF
     default_transition_length: 0s
 
+button:
+  - platform: restart
+    name: "Restart urządzenia"
+    entity_category: diagnostic
 
 # Pinout ESP32-C6 -> SX1276:
 # GPIO18 -> SCK
@@ -120,7 +108,6 @@ wmbus_radio:
   cs_pin: GPIO23
   reset_pin: GPIO22
   irq_pin: GPIO21
-
   on_frame:
     - then:
         - logger.log:
@@ -129,7 +116,6 @@ wmbus_radio:
               - frame->rssi()
               - frame->as_hex().c_str()
               - frame->data().size()
-
     - then:
         - repeat:
             count: 1
@@ -141,9 +127,7 @@ wmbus_radio:
                   blue: 100%
                   brightness: 100%
                   transition_length: 0s
-          
               - delay: 100ms
-          
               - light.turn_off:
                   id: radio_rgb_led
                   transition_length: 0s
@@ -154,30 +138,19 @@ wmbus_radio:
 
 wmbus_meter:
   - id: water_meter_izar
-    meter_id: "414FDFAC"  ######## enter your IZAR meter ID here ###########
+    meter_id: "XXXXXXXX"  ######## enter your IZAR meter ID here ###########
     type: izar
   - id: water_meter_apator
-    meter_id: "07208205"  ######## enter your APATOR meter ID here ###########
+    meter_id: "XXXXXXXX"  ######## enter your APATOR meter ID here ###########
     type: apator162
     key: "00000000000000000000000000000000"
   - id: gas_meter_unismart
-    meter_id: "00062651"  ######## enter your UNISMART meter ID here ###########
+    meter_id: "XXXXXXXX"  ######## enter your UNISMART meter ID here ###########
     type: unismart
     key: "00000000000000000000000000000000"
 
-
-
-button:
-  - platform: restart
-    name: "Restart urządzenia"
-    entity_category: diagnostic
-
-
-
-
 ######################################################################
 # Sensory
-#
 # Każdy nazwany sensor zostanie wystawiony:
 # 1. przez ESPHome API,
 # 2. przez Zigbee do ZHA albo Zigbee2MQTT.
@@ -231,7 +204,7 @@ sensor:
     state_class: total_increasing
     unit_of_measurement: "m³"
     filters:
-      - offset: 991.10
+      - offset: 991.10   #przykładowy offset dla licznika
     report: force
     endpoint: 5
     
