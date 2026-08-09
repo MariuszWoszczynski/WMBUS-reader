@@ -147,11 +147,12 @@ zigbee:
       - light.turn_off:
           id: radio_rgb_led
           transition_length: 0s
-          
 light:
   - platform: esp32_rmt_led_strip
     id: radio_rgb_led
-    pin: GPIO8
+    pin:
+      number: GPIO8
+      ignore_strapping_warning: true
     name: "Test RGB"
     num_leds: 1
     chipset: WS2812
@@ -225,14 +226,14 @@ wmbus_radio:
 
 wmbus_meter:
   - id: water_meter_izar
-    meter_id: "414FDFAC"  ######## enter your IZAR meter ID here ###########
+    meter_id: "00000000"  ######## enter your IZAR meter ID here ###########
     type: izar
   - id: water_meter_apator
-    meter_id: "07208205"  ######## enter your APATOR meter ID here ###########
+    meter_id: "00000000"  ######## enter your APATOR meter ID here ###########
     type: apator162
     key: "00000000000000000000000000000000"
   - id: gas_meter_unismart
-    meter_id: "00062651"  ######## enter your UNISMART meter ID here ###########
+    meter_id: "00000000"  ######## enter your UNISMART meter ID here ###########
     type: unismart
     key: "00000000000000000000000000000000"
 
@@ -286,7 +287,7 @@ sensor:
   - platform: wmbus_meter
     parent_id: gas_meter_unismart
     field: total_m3
-    device_class: water
+    device_class: gas
     name: "Unismart gas meter - state"
     accuracy_decimals: 2
     state_class: total_increasing
