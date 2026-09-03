@@ -1,0 +1,177 @@
+dashboard_import: 
+  package_import_url: github://MariuszWoszczynski/WMBUS-reader/WMBUS-reader-zigbee.yaml@main 
+  import_full_config: true
+
+substitutions:
+  name: "wmbus-reader-zigbee"
+  friendly_name: "WMBUS Reader Zigbee"
+
+esphome:
+  name: "${name}"
+  friendly_name: "${friendly_name}"
+  # Natywna obsługa Zigbee na ESP32-C6 wymaga ESPHome 2026.7.0+
+  min_version: 2026.7.0
+
+  project:
+    name: esphome.wmbus_reader_zigbee
+    version: "1.0"
+  
+  on_boot:
+    priority: -100
+    then:
+      - delay: 100ms
+      - light.turn_on:
+          id: radio_rgb_led
+          red: 100%
+          green: 100%
+          blue: 100%
+          brightness: 40%
+          transition_length: 0s
+      - delay: 400ms
+      - light.turn_off:
+          id: radio_rgb_led
+          transition_length: 0s
+      - script.execute: factory_ap_led
+  
+            
+esp32:
+  board: esp32-c6-devkitm-1
+  flash_size: 4MB
+  framework:
+    type: esp-idf
+    sdkconfig_options:
+      CONFIG_MBEDTLS_HARDWARE_SHA: "n"
+
+# Enable logging
+logger:
+  level: DEBUG
+
+
+# ESPHome API pozostaje do adopcji, logów i obsługi z Dashboardu
+api:
+  encryption:
+    key: "IAHzf/W7ltjO0oJPBxXC0k7YCXPKRpLmLU4lOnizC9Q="
+
+ota:
+  - platform: esphome
+
+# Wi-Fi pozostaje w trybie station:
+# ESPHome Dashboard, API, OTA, web_server i SNTP nadal działają.
+wifi:
+  ap:
+    ssid: "Wmbus-Reader-V5 Hotspot"
+
+
+# Nie dodajemy captive_portal,
+# ponieważ wymaga fallbackowego punktu dostępowego Wi-Fi.
+captive_portal:
+
+
+external_components:
+  - source:
+      type: git
+      url: https://github.com/IoTLabs-pl/esphome-components
+    
+mdns:
+  disabled: false
+
+time:
+  - platform: sntp
+    id: time_sntp
+
+web_server:
+  port: 80
+  version: 3
+
+script:
+  - id: factory_ap_led
+    mode: restart
+    then:
+      - while:
+          condition:
+            wifi.ap_active
+          then:
+            - light.turn_on:
+                id: radio_rgb_led
+                red: 0%
+                green: 100%
+                blue: 0%
+                brightness: 40%
+                transition_length: 0s
+            - delay: 150ms
+            - light.turn_off:
+                id: radio_rgb_led
+                transition_length: 0s
+            - delay: 850ms
+              
+          
+light:
+  - platform: esp32_rmt_led_strip
+    id: radio_rgb_led
+    pin:
+      number: GPIO8
+      ignore_strapping_warning: true
+    name: "Test RGB"
+    num_leds: 1
+    chipset: WS2812
+    rgb_order: GRB
+    internal: true
+    restore_mode: ALWAYS_OFF
+    default_transition_length: 0s
+
+    
+button:
+  - platform: restart
+    name: "Restart urządzenia"
+    entity_category: diagnostic
+
+        
+# Pinout ESP32-C6 -> SX1276:
+# GPIO18 -> SCK
+# GPIO19 -> MISO
+# GPIO20 -> MOSI
+# GPIO23 -> NSS / CS
+# GPIO22 -> RESET
+# GPIO21 -> DIO1 / IRQ
+# 3V3    -> VCC
+# GND    -> GND
+
+spi:
+  clk_pin: GPIO18
+  mosi_pin: GPIO20
+  miso_pin: GPIO19
+
+wmbus_radio:
+  radio_type: SX1276
+  cs_pin: GPIO23
+  reset_pin: GPIO22
+  irq_pin: GPIO21
+
+  on_frame:
+    - then:
+        - logger.log:
+            format: "RSSI: %ddBm T: %s (%d)"
+            args:
+              - frame->rssi()
+              - frame->as_hex().c_str()
+              - frame->data().size()
+
+    - then:
+        - repeat:
+            count: 1
+            then:
+              - light.turn_on:
+                  id: radio_rgb_led
+                  red: 0%
+                  green: 100%
+                  blue: 0%
+                  brightness: 100%
+                  transition_length: 0s
+          
+              - delay: 100ms
+          
+              - light.turn_off:
+                  id: radio_rgb_led
+                  transition_length: 0s
+
+
