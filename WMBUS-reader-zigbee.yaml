@@ -1,6 +1,3 @@
-dashboard_import: 
-  package_import_url: github://MariuszWoszczynski/WMBUS-reader/WMBUS-reader-zigbee.yaml@main 
-  import_full_config: true
 
 substitutions:
   name: "wmbus-reader-zigbee"
@@ -55,34 +52,7 @@ esp32:
 # Enable logging
 logger:
   level: DEBUG
-
-
-# ESPHome API pozostaje do adopcji, logów i obsługi z Dashboardu
-api:
-  encryption:
-    key: "IAHzf/W7ltjO0oJPBxXC0k7YCXPKRpLmLU4lOnizC9Q="
-
-ota:
-  - platform: esphome
-
-# Wi-Fi pozostaje w trybie station:
-# ESPHome Dashboard, API, OTA, web_server i SNTP nadal działają.
-wifi:
-  ssid: !secret wifi_ssid
-  password: !secret wifi_password
-  output_power: 18dB
   
-  # Nie dodawaj tutaj sekcji "ap:".
-  # Wi-Fi Access Point nie jest obsługiwany równocześnie z Zigbee.
-  #ap:
-  #  ssid: "Wmbus-Reader-V5 Fallback Hotspot"
-
-
-# Nie dodajemy captive_portal,
-# ponieważ wymaga fallbackowego punktu dostępowego Wi-Fi.
-#captive_portal:
-
-
 external_components:
   - source:
       type: git
@@ -93,17 +63,6 @@ globals:
     type: bool
     restore_value: no
     initial_value: "false"
-    
-mdns:
-  disabled: false
-
-time:
-  - platform: sntp
-    id: time_sntp
-
-web_server:
-  port: 80
-  version: 3
 
 script:
   - id: zigbee_waiting_led
@@ -227,7 +186,7 @@ wmbus_radio:
 wmbus_meter:
   - id: water_meter_izar
     meter_id: "00000000"  ######## enter your IZAR meter ID here ###########
-    type: izar
+    type: izarv2
   - id: water_meter_apator
     meter_id: "00000000"  ######## enter your APATOR meter ID here ###########
     type: apator162
