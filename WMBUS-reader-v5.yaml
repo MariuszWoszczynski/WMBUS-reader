@@ -120,7 +120,7 @@ wmbus_radio:
 wmbus_meter:
   - id: water_meter_izar
     meter_id: "00000000"  ######## enter your IZAR meter ID here ###########   #0x00000000  #ID format for SzczepanLeon
-    type: izar
+    type: izarv2
   - id: water_meter_apator
     meter_id: "00000000"  ######## enter your APATOR meter ID here ###########    #0x00000000  #ID format for SzczepanLeon
     type: apator162
