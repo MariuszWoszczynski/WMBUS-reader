@@ -160,10 +160,10 @@ wmbus_radio:
               - frame->rssi()
               - frame->as_hex().c_str()
               - frame->data().size()
-
     - then:
-        - repeat:
-            count: 1
+        - if:
+            condition:
+              lambda: return id(zigbee_joined);
             then:
               - light.turn_on:
                   id: radio_rgb_led
@@ -172,9 +172,7 @@ wmbus_radio:
                   blue: 0%
                   brightness: 100%
                   transition_length: 0s
-          
               - delay: 100ms
-          
               - light.turn_off:
                   id: radio_rgb_led
                   transition_length: 0s
