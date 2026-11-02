@@ -155,8 +155,9 @@ wmbus_radio:
   on_frame:
     - then:
         - logger.log:
-            format: "RSSI: %ddBm T: %s (%d)"
+            format: "ID: %s RSSI: %ddBm T: %s (%d)"
             args:
+              - frame->meter_id().c_str()
               - frame->rssi()
               - frame->as_hex().c_str()
               - frame->data().size()
