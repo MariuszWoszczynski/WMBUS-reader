@@ -84,8 +84,8 @@ spi:
 wmbus_radio:
   radio_type: SX1262
   cs_pin: GPIO23
-  reset_pin: GPIO22  #gdo0 w cc
-  dio1_pin: GPIO21  #gdo2 w cc
+  reset_pin: GPIO22  
+  dio1_pin: GPIO21  
   busy_pin: GPIO18
   tcxo_voltage: 1.8V
   rf_switch: true
